@@ -1,7 +1,14 @@
 class Scrabble
 
   def score(word)
-    1
+    letter_values = point_values
+    if word == "" || word == nil
+      0
+    else
+      word.split("").map do |letter|
+        letter_values[letter.upcase]
+      end.reduce(:+)
+    end
   end
 
   def point_values
@@ -15,4 +22,26 @@ class Scrabble
       "Y"=>4, "Z"=>10
     }
   end
+
+  def greater_than_7_bonus(word)
+    score = 0
+    word_length = word.length
+    if word_length >= 7
+      10 + score
+    else
+      score
+    end
+  end
+
+
+  def score_with_mulitpliers(word, letter_multipliers, multiplier = 1)
+    #require 'pry'; binding.pry
+    letter_values = point_values
+    bonus = greater_than_7_bonus(word)
+    word_value = word.split("").each_with_index.map do |letter, index|
+      letter_values[letter.upcase] * letter_multipliers[index]
+    end
+    word_value.reduce(:+) * multiplier + (bonus * multiplier)
+  end
+
 end
